@@ -1,0 +1,572 @@
+//
+// panic-3d : LESS mixins for easy 3D with CSS3.
+// By Christophe BOISIER on 22/11/2013.
+//
+// ----------------------------------------------------------------------------
+
+.viewport(@width: 100%, @height: 100%, @perspective: 800px) {
+  perspective:@perspective;
+  position: absolute;
+  overflow: hidden;
+  //background:transparent;
+  width: @width;
+  height: @height;
+}
+
+.camera() {
+  transform-style: preserve-3d;
+  width:100%;
+  height:100%;
+}
+
+.assembly(@width: 20em, @height: 20em) {
+  position: absolute;
+  transform-style: preserve-3d;
+  top:50%;
+  left:50%;
+  width: @width;
+  height: @height;
+  margin: -(@height / 2) 0 0 -(@width / 2);
+}
+
+.shape, .face, .face-wrapper, .cr {
+  position: absolute;
+  transform-style: preserve-3d;
+}
+
+.shape {
+  position: absolute;
+  transform-style: preserve-3d;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform-origin: 50%;
+  background-size: 100% 100%;
+  background-position: center;
+}
+
+.face, .face-wrapper {
+  position: absolute;
+  transform-style: preserve-3d;
+  overflow: hidden;
+  transform-origin: 0 0;
+  backface-visibility: visible;
+}
+
+.face-wrapper .face {
+  left: 100%;
+  width: 100%;
+  height: 100%
+}
+
+.photon-shader {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%
+}
+
+.side {
+  left: 50%;
+}
+
+.cr, .cr .side {
+  height: 100%;
+}
+
+// mixins ---------------------------------------------------------------------
+
+.background(@color) when (isColor(@color)){
+background-color:@color;
+}
+
+.background(@url) when (@url){ //(isurl(url("@{url}")))
+background-image:url("@{url}");
+}
+
+// cuboid ---------------------------------------------------------------------
+
+.cuboid(@width: 4em, @height: 5em, @depth: 3em) {
+
+  //transform:translate3D(@tx, @ty, @tz) rotateX(@rx) rotateY(@ry) rotateZ(@rz);
+  opacity:1;
+  width:@width;
+  height:@height;
+  margin:-(@height / 2) 0 0 -(@width / 2);
+
+  div:nth-child(1), .ft {
+    transform:translateZ((@depth / 2));
+    background-position: -@depth -@depth;
+  }
+  div:nth-child(2), .bk {
+    transform:translateZ(-(@depth / 2)) rotateY(180deg);
+  }
+  div:nth-child(3), .rt, div:nth-child(4), .lt {
+    width:@depth;
+    height:@height;
+  }
+  div:nth-child(6), .tp, div:nth-child(5), .bm {
+    width:@width;
+    height:@depth;
+  }
+  .face {
+    background-size:((@width + @depth) * 2) (@height * 2 + @depth);
+    background-repeat:no-repeat;
+  }
+
+  div:nth-child(1), .ft, div:nth-child(2), .bk {
+    width: 100%;
+    height: 100%;
+  }
+  div:nth-child(2), .bk {
+    left: 100%;
+    background-position: -(@depth + @height + @depth) -@depth;
+  }
+  div:nth-child(3), .rt {
+    transform: rotateY(-90deg) translateX(-50%);
+    background-position: 0 -@depth;
+  }
+  div:nth-child(4), .lt {
+    transform: rotateY(90deg) translateX(-50%);
+    background-position: -(@depth + @width) -@depth;
+  }
+  div:nth-child(6), .tp {
+    transform: rotateX(90deg) translateY(-50%);
+    background-position: -@depth 0;
+  }
+  div:nth-child(5), .bm {
+    transform: rotateX(-90deg) translateY(-50%);
+    background-position: -@depth -(@depth + @height);
+  }
+  div:nth-child(4), .lt {
+    left: 100%;
+  }
+  div:nth-child(5), .bm {
+    top: 100%;
+  }
+
+}
+
+// cylinder -------------------------------------------------------------------
+
+.cylinder(@diameter: 6em, @length: 5em, @sides: 14) {
+
+  //@sides:0;
+  //transform:translate3D(-(@diameter / 2), -(@length / 2), 0em) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  //@sides:`document.body.clientHeight`;
+  //@sid:`jQuery(document).ready(function(){alert($(this).children('div').length)});`;
+  //@sides:`document.querySelectorAll('div').length`;
+  //@sid:`alert("@{sides}")`;
+  //@sides:`document.querySelectorAll('div').length`;
+  
+  opacity:1;
+  width:@diameter;
+  height:@length;
+  margin:-(@length / 2) 0 0 -(@diameter / 2);
+
+  div:nth-child(2), .tp, div:nth-child(1), .bm {
+    width:@diameter;
+    height:@diameter;
+  }
+  /*div:nth-child(2) .face, .tp .face, div:nth-child(1) .face, .bm .face {
+    width:100%;
+    height:100%;
+  }*/
+  .cylinder-sides( @diameter, @length, @sides );
+
+  .face {
+    background-size:(@width * @sides) ((@diameter + @length ) * 2);
+    background-repeat:no-repeat;
+  }
+
+  div:nth-child(2), .tp {
+    transform: rotateX(90deg) translateY(-50%);
+  }
+  div:nth-child(1), .bm {
+    transform: rotateX(-90deg) translateY(-50%);
+  }
+  div:nth-child(2), .tp, div:nth-child(1), .bm, div:nth-child(2) .photon-shader, .tp .photon-shader, div:nth-child(1) .photon-shader, .bm .photon-shader {
+    border-radius: 50%;
+  }
+  div:nth-child(1), .bm {
+    top: 100%;
+  }
+}
+
+
+.cylinder-sides ( @diameter, @length, @sides, @i: 1 ) when ( @i >= 1 ) and ( @i =< @sides ) {
+
+  @angle:(360deg / @sides / 2);
+  @tz-min:(cos(@angle) * (@diameter / 2));
+  @tz-max:(@diameter / 2);
+  //@tz:((@tz-min + @tz-max) / 2);
+  @tz:@tz-max;
+  @width:(tan(@angle) * @tz * 2);
+  @ry:(@angle + @angle * (@i - 1) * 2);
+
+  @n:(@i + 2);
+  div:nth-child(@{n}) {
+    width:@width;
+    height:@length;
+    background-position: -(@width * (@i - 1)) -@diameter;
+    transform: rotateY(@ry) translateX(-50%) translateZ(@tz);
+    left: 50%
+  }
+  .cylinder-sides( @diameter, @length, @sides, @i + 1 );
+
+}
+
+// prism ----------------------------------------------------------------------
+
+.prism(@width: 4em, @height: 5em, @depth: 3em) {
+
+  @angle:atan((@depth / @height));
+  @hypotenuse:sqrt(pow(@depth,2) + pow(@height,2));
+
+  //transform:translate3D(@tx, @ty, @tz) rotateX(@rx) rotateY(@ry) rotateZ(@rz);
+  opacity:1;
+  width:@width;
+  height:@height;
+  //margin:-(@height / 2) 0 0 -(@depth / 2);
+  margin:-(@width / 2) 0 0 -(@height / 2);
+
+  div:nth-child(3) .face, .rt .face {
+    transform:rotateZ(-@angle);
+  }
+  div:nth-child(4) .face, .lt .face {
+    transform:rotateZ(@angle);
+  }
+  div:nth-child(1), .ft {
+    height:@hypotenuse;
+    transform:translateZ(-(@depth / 2)) rotateX(@angle);
+    background-position: -@depth 0;
+  }
+  div:nth-child(2), .bk {
+    transform:translateZ(-(@depth / 2)) rotateY(180deg);
+    background-position: -(@depth + @width + @depth) 0;
+  }
+  div:nth-child(3), .rt, div:nth-child(4), .lt {
+    width:@depth;
+    height:@height;
+  }
+  div:nth-child(3) .face, .rt .face, div:nth-child(4) .face, .lt .face {
+    height:@hypotenuse;
+  }
+  div:nth-child(5), .bm {
+    width:@width;
+    height:@depth;
+  }
+  .face {
+    background-size:((@width + @depth) * 2) (@height * 2 + @depth);
+    background-repeat:no-repeat;
+  }
+
+  div:nth-child(1), .ft, div:nth-child(2), .bk {
+    width: 100%;
+  }
+  div:nth-child(2), .bk {
+    left: 100%;
+    height: 100%;
+  }
+  div:nth-child(3), .rt {
+    transform: rotateY(-90deg) translateX(-50%);
+    background-position: 0 0;
+  }
+  div:nth-child(4), .lt {
+    transform: rotateY(90deg) translateX(-50%);
+    background-position: -(@depth + @width) 0;
+  }
+  div:nth-child(5), .bm {
+    transform: rotateX(-90deg) translateY(-50%);
+    background-position: -@depth -@height;
+  }
+  div:nth-child(4), .lt {
+    left: 100%;
+  }
+  div:nth-child(5), .bm {
+    top: 100%;
+  }
+  div:nth-child(3) .face, .rt .face {
+    left: -100%;
+    transform-origin: 100% 0;
+  }
+}
+
+// pyramid --------------------------------------------------------------------
+
+.pyramid(@width: 4em, @height: 5em) {
+
+  @angle:atan((@width / 2) / @height);
+  @hypotenuse:(sqrt(pow((@width / 2), 2) + pow(@height, 2)));
+  @scale:unit( @hypotenuse / (@width / 2));
+
+  opacity:1;
+  margin:-(@width / 2) 0 0 -(@height / 2);
+
+
+  width:@width;
+  height:@height;
+
+  .face-wrapper {
+    width:@width;
+    height:(@width / 2);
+  }
+  .face-wrapper .face {
+    width:@width;
+    height:@width;
+  }
+
+  div:nth-child(1), .ft {
+    transform:scaleZ(@scale) scaleY(@scale) rotateX(@angle);
+  }
+  div:nth-child(2), .bk {
+    transform:scaleZ(@scale) scaleY(@scale) rotateX(-@angle) rotateY(180deg);
+  }
+  div:nth-child(4), .rt {
+    transform:scaleX(@scale) scaleY(@scale) rotateZ(@angle) rotateY(-90deg);
+  }
+  div:nth-child(3), .lt {
+    transform:scaleX(@scale) scaleY(@scale) rotateZ(-@angle) rotateY(90deg);
+  }
+
+  /*
+  div:nth-child(1), .ft {
+    .triangle(@width, @hypotenuse);
+    transform:rotateX(@angle);
+  }
+  div:nth-child(2), .bk {
+    .triangle(@width, @hypotenuse);
+    transform:rotateX(-@angle) rotateY(180deg);
+  }
+  div:nth-child(4), .rt {
+    .triangle(@width, @hypotenuse);
+    transform:rotateZ(@angle) rotateY(-90deg);
+  }
+  div:nth-child(3), .lt {
+    .triangle(@width, @hypotenuse);
+    transform:rotateZ(-@angle) rotateY(90deg);
+  }
+  */
+
+  div:nth-child(5), .bm {
+    width:@width;
+    height:@width;
+  }
+  .face {
+    background-size: (@width * 4) (@hypotenuse * 2 + @width);
+    background-repeat:no-repeat;
+  }
+
+  //@translate: ((1 - ((@width / 2) / @height)) / 2) * 100%;
+  .face-wrapper .face {
+    transform: rotateZ(45deg) translateX(-35.35%) translateY(35.35%);
+  }
+  div:nth-child(2), .bk {
+    left: 100%;
+  }
+  div:nth-child(5), .bm {
+    top: 100%;
+    transform: rotateX(-90deg) translateY(-50%);
+    background-position: -@width -@hypotenuse;
+  }
+  div:nth-child(4), .rt, div:nth-child(3), .lt {
+    transform-origin: 50% 0;
+  }
+}
+
+// pyramid3 -------------------------------------------------------------------
+
+.pyramid3(@width: 4em, @height: 5em) {
+
+position: relative;
+margin: 100px auto;
+height: 500px;
+width: 100px;
+
+#pyramid > div:first-child {
+border-color: transparent transparent transparent rgba(50, 50, 50, 0.6);
+transform: rotateY(-19.5deg) rotateX(180deg) translateY(-400px);
+}
+#pyramid > div:nth-child(2) {
+border-color: transparent transparent transparent rgba(50, 50, 50, 0.6);
+transform: rotateY(90deg) rotateZ(60deg) rotateX(180deg) translateY(-400px);
+}
+#pyramid > div:nth-child(3) {
+border-color: transparent transparent transparent rgba(50, 50, 50, 0.9);
+transform: rotateX(60deg) rotateY(19.5deg);
+}
+#pyramid > div:nth-child(4) {
+border-color: transparent transparent transparent rgba(50, 50, 50, 0.8);
+transform: rotateX(-60deg) rotateY(19.5deg) translateX(-116px) translateY(-200px) translateZ(326px);
+}
+
+#pyramid > div {
+position: absolute;
+border-style: solid;
+border-width: 200px 0 200px 346px;
+transform-origin: 0 0;
+}
+
+
+}
+
+.pyramid3-sides ( @diameter, @length, @sides, @i: 1 ) when ( @i >= 1 ) and ( @i =< @sides ) {
+
+  @angle:(360deg / @sides / 2);
+  @tz-min:(cos(@angle) * (@diameter / 2));
+  @tz-max:(@diameter / 2);
+  @tz:((@tz-min + @tz-max) / 2);
+  @width:(tan(@angle) * @tz * 2);
+  @ry:(@angle + @angle * (@i - 1) * 2);
+  @child:(@i + 2);
+
+  div:nth-child(@{child}) {
+    width:@width;
+    height:@length;
+    background-position: -(@width * (@i - 1)) -@diameter;
+    transform: rotateY(@ry) translateX(-50%) translateZ(@tz);
+    left: 50%
+  }
+  .cylinder-sides( @diameter, @length, @sides, @i + 1 );
+
+}
+
+// sphere ---------------------------------------------------------------------
+
+.sphere(@diameter: 6em, @sides: 14) {
+
+  opacity:1;
+  width:@diameter;
+  height:@diameter;
+  margin:-(@diameter / 2) 0 0 -(@diameter / 2);
+
+  @angle:(360deg / @sides);
+  @radius:(cos(@angle) * (@diameter / 2));
+  @height:(@radius * tan(@angle / 2) * 2);
+  @background-size:(@height * @sides) (@height * @sides);
+  
+  .sphere-rows( );
+
+}
+
+.sphere-rows ( @iy: 1 ) when ( @iy >= 1 ) and ( @iy =< @sides / 2 ) {
+
+  @ry:(90deg - @angle * (@iy - 1));  
+  @width:@height * abs(cos(@ry));
+  
+  .sphere-cols ( @iy );
+  .sphere-rows ( @iy + 1 );
+
+}
+
+.sphere-cols ( @iy, @ix: 1 ) when ( @ix >= 1 ) and ( @ix =< @sides * @sides ) {
+
+  @rx:(@angle * (@ix - 1) + @angle / 2);
+  @n:((@iy - 1) * @sides + @ix);
+  
+  .face-wrapper:nth-child(@{n}) {
+
+    width:@width;
+    height:@height;
+    left:50%;
+    top:50%;
+
+    .face {
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      margin:auto;
+      width:@width;
+      height:@height;
+      background-size:@background-size;
+      background-repeat:no-repeat;
+      background-position: -(@height * (@ix - 1) + (@height - @width) / 2) -(@height * (@iy - 1));
+    }
+
+    transform: rotateY(@rx) rotateX(@ry) translateX(-50%) translateY(-50%) translateZ(@radius);
+
+  }
+  .sphere-cols( @iy, @ix + 1 );
+
+}
+
+// spike ----------------------------------------------------------------------
+
+.spike(@width: 4em, @height: 5em) {
+  //.assembly(@width, @height);
+
+  div:nth-child(1){    
+    .pyramid(@width, @height / 2);
+    transform:translateY(-@height / 4);
+  }
+
+  div:nth-child(2){
+    .pyramid(@width, @height / 2);
+    transform:scaleY(-1) translateY(-@height / 4);
+  }
+
+}
+
+// triangle -------------------------------------------------------------------
+
+.triangle(@width: 4em, @height: 5em){
+  width:@width;
+  height:@height;
+
+  div{
+  width:@width;
+  height:@width;
+  @hypotenuseX:(sqrt(pow((@width / 2), 2) + pow((@width / 2), 2)));
+  @hypotenuseY:(sqrt(pow((@height / 2), 2) + pow((@height / 2), 2)));
+  @scaleX:unit( @hypotenuseX / @width);
+  @scaleY:unit( @hypotenuseY / (@width / 2));
+  @translate: ((1 - ((@width / 2) / @height)) / 2) * 100%;
+  transform:scaleX(@scaleX) scaleY(@scaleY) rotate(45deg) translateX(@translate) translateY(@translate);
+  }
+}
+
+.triangle1(@width: 4em, @height: 5em){
+  width:@width;
+  height:@height;
+
+  div{
+  width:@width;
+  height:@width;
+  @hypotenuseX:(sqrt(pow((@width / 2), 2) + pow((@width / 2), 2)));
+  @hypotenuseY:(sqrt(pow((@height / 2), 2) + pow((@height / 2), 2)));
+  @scaleX:unit( @hypotenuseX / @width);
+  @scaleY:unit( @hypotenuseY / (@width / 2));
+  @translate: ((1 - ((@width / 2) / @height)) / 2) * 100%; //35.35%((@scaleY - @scaleX) * 100%)
+  transform:scaleX(@scaleX) scaleY(@scaleY) rotate(45deg) translateX(@translate) translateY(@translate);
+  }
+}
+
+// trinangle ------------------------------------------------------------------
+// horizontal text
+
+.triangle2(@width: 4em, @height: 5em){
+
+  width:@width;
+  height:@width;
+  margin-left:-50%;
+  margin-bottom:-50%;
+  @hypotenuseX:(sqrt(pow((@width / 2), 2) + pow((@width / 2), 2)));
+  @hypotenuseY:(sqrt(pow((@height / 2), 2) + pow((@height / 2), 2)));
+  @scaleX:unit( @hypotenuseX / @width);
+  @scaleY:unit( @hypotenuseY / (@width / 2));
+  @translate: ((1 - ((@width / 2) / @height)) / 2) * 100%;
+  transform:scaleX(@scaleX) scaleY(@scaleY) rotate(45deg) translateX(@translate) translateY(@translate);
+  
+  div{
+  width:@width;
+  height:@height;
+  left:-50%;
+  top:50%;
+  transform: rotate(-45deg) scaleY(1 / @scaleY) scaleX(1 / @scaleX); // translateY(-@translate) translateX(-@translate)
+  }
+}
+
+// ----------------------------------------------------------------------------

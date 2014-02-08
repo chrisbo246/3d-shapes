@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <title>3D shapes with LESS/CSS3/jQuery</title>
+  <meta name="description" content="3D cube with CSS3" />
+  <meta name="author" content="Christophe BOISIER">
+  <meta charset=UTF-8 />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!--CSS-->
+  <style>
+  @import url(http://fonts.googleapis.com/css?family=Raleway:900);
+  body{
+  width:100%;
+  height:100%;
+  margin:0;
+  padding:0;
+  font-size:100%;
+  font-family: 'Raleway', sans-serif;
+  }
+  #viewport1{
+  /*background-image: -webkit-radial-gradient(50% 50%, 1000px 1000px, #000, #000 6%, #222);
+  background-image: radial-gradient(50% 50%, 1000px 1000px, #000, #000 6%, #f22);*/
+  background-image: -webkit-radial-gradient(50% 50%, 1000px 1000px, #bbb, #bbb 6%, #fff);
+  background-image: radial-gradient(50% 50%, 1000px 1000px, #bbb, #bbb 6%, #fff);
+  }
+  #viewport1:before{
+  content:"3D";
+  color:rgba(255,255,255,.03);
+  font-size:30em;
+  font-weight:900;
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  bottom:0;
+  margin:auto auto;
+  text-align:center;
+  }
+  .face{  
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+  }
+  #shapes .shape .face{
+  color:black;
+  background-color:white;
+  background-image:url("images/strawberry.jpg");
+  opacity:.8;
+  }
+  #shapes .shape .face:after{
+  content:"Lorem ipsum dolor sit amet, officiis postulant eum in, vim percipit iracundia cu. Eirmod necessitatibus quo ne. Vis no assum facete definiebas, quo ignota primis rationibus ad. In idque soluta patrioque eam, at ullum mnesarchum adipiscing his, ei duo decore mentitum accusata. Cu nec voluptua salutandi aliquando, case velit posidonium eos te. Cu mei modus minim liber, his blandit menandri te, suas denique oportere vel an.";
+  }
+  #shapes .shape:hover .face:after{
+  display:none;
+  }
+  #shapes>div>div{
+  animation:spin 10s linear 0 infinite normal;
+  }
+  #shapes>div>div:hover{
+  animation-play-state:paused;
+  }
+  #big-cog_shape1 .face,
+  #small-cog_shape1 .face{
+  background-image:url("images/brushed_alu.png");
+  text-align:center;
+  color:rgba(0,0,0,.5);  
+  }
+  #big-cog_shape1 .face dl{
+  text-align:left;
+  margin: 0 3em;
+  }
+  #big-cog_shape1 .face h2{
+  font-size:3em;
+  text-transform:uppercase;
+  text-shadow:0 3px 0 3px rgba(255,255,255,.8);
+  margin:0;
+  }
+  @keyframes camera-anim {
+  from{transform: translateX(0em) translateY(15em) translateZ(-40em) rotateX(10deg) rotateY(0deg)}
+  80%{transform: translateX(-40em) translateY(5em) translateZ(-20em) rotateX(-5deg) rotateY(10deg)}
+  to{transform: translateX(0em) translateY(15em) translateZ(-40em) rotateX(10deg) rotateY(0deg)}
+  }
+  @keyframes spin {
+  from{transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg)}
+  to{transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg)}
+  }
+  </style>
+  <link href="css/helpers.css" rel="stylesheet" />
+  
+  <!--LESS-->
+  <style type="text/less">
+  @import "less/panic-3d.less";
+
+  @big-cog_sides:10;
+  @big-cog_diameter:70em;  
+  @big-cog_anim_duration:60s;
+  @small-cog_diameter:50em;
+  
+  #viewport1{
+    .viewport(100%, 100%, 800px);
+    &:hover #big-cog {animation-play-state:paused;}
+    &:hover #small-cog {animation-play-state:paused;}
+    &:hover #camera1 {animation-play-state:paused;}
+    
+    #camera1{
+    .camera();
+    animation:camera-anim 60s linear 0 infinite normal;
+    }
+    
+    #big-cog{
+      .assembly(20em, 20em);
+      animation:big-cog @big-cog_anim_duration linear 0 infinite normal;      
+      
+      #big-cog_shape1{
+      .cylinder(@big-cog_diameter, 16em, @big-cog_sides);   
+      }
+      
+      #shapes{
+        .assembly(40em, 40em);
+        transform:translateY(-14em);
+        
+        @translate:(@big-cog_diameter / 2 - 5em);
+        @angle:(360deg / @big-cog_sides) * 2;
+        @delta:-90deg + @angle / 2; //-90deg + @angle / 2;
+        
+        >div:nth-child(1){
+        .assembly(10em, 10em);
+        transform: rotateY(@delta + @angle * 1) translateZ(@translate);
+        }
+        >div:nth-child(2){
+        .assembly(10em, 10em);
+        transform: rotateY(@delta + @angle * 2) translateZ(@translate);
+        }
+        >div:nth-child(3){
+        .assembly(10em, 10em);
+        transform: rotateY(@delta + @angle * 3) translateZ(@translate);
+        }
+        >div:nth-child(4){
+        .assembly(10em, 10em);
+        transform: rotateY(@delta + @angle * 4) translateZ(@translate);
+        }
+        >div:nth-child(5){
+        .assembly(10em, 10em);
+        transform: rotateY(@delta + @angle * 5) translateZ(@translate);
+        }
+        /*>div:nth-child(6){
+        .assembly(10em, 10em);
+        transform: rotateY(@delta + @angle * 6) translateZ(@translate);
+        }*/
+        #cuboid1{
+        .cuboid(10em, 8em, 6em);        
+        }
+
+        #cylinder1{
+        .cylinder(10em, 8em, 8);
+        }
+
+        #prism1{
+        .prism(10em, 8em, 6em);
+        }
+
+        #pyramid1{
+        .pyramid(10em, 8em);
+        }
+
+        #sphere1{
+        .sphere(10em, 10);
+        }
+        
+        /*#spike1{
+        .spike(4em, 10em);
+        }*/
+
+      }
+      
+    }
+    
+    #small-cog{
+      .assembly(20em, 20em);
+      animation:small-cog (@big-cog_anim_duration * (@small-cog_diameter / @big-cog_diameter)) linear 0 infinite normal;
+      
+      #small-cog_shape1{
+      .cylinder(@small-cog_diameter, 16em, 8);    
+      }
+    }
+
+  }
+    
+  @keyframes big-cog {
+  from{transform: translateX(0) rotateY(0deg)}
+  to{transform: translateX(0) rotateY(-360deg)}
+  }
+  @keyframes small-cog {
+  from{transform: translateX((@big-cog_diameter + @small-cog_diameter) / 2) rotateY(0deg)}
+  to{transform: translateX((@big-cog_diameter + @small-cog_diameter) / 2) rotateY(360deg)}
+  }
+  </style>
+  <!--<link rel="stylesheet/less" type="text/css" href="less/style.less" />-->
+
+  <!--JS-->
+  <script type="text/javascript">
+  less = {
+  env: "development", // development or "production"
+  dumpLineNumbers: "comments", // comments or "mediaQuery" or "all"
+  relativeUrls: true
+  };
+  </script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/less/1.4.2/less.min.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/prefixfree/1.0.7/prefixfree.min.js"></script>
+  <script src="js/panic-3d.js"></script>
+
+</head>
+<body>
+  
+  <!-- class viewport camera and assembly are only here for debug -->
+
+  <div id="viewport1">
+    <div id="camera1">
+
+      <div id="big-cog">
+
+        <div id="big-cog_shape1" class="cylinder">
+          <div></div>
+          <div></div>
+          <div><h2>Cuboid</h2><dl><dt>HTML</dt><dd><code>&lt;div id="cuboid1" class="cuboid"&gt;<br />&lt;div&gt;&lt;/div&gt; ( *6 )<br />&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#cuboid1{<br />.cuboid( @width, @height, @depth );<br />}</code></dd></dl></div>
+          <div></div>
+          <div><h2>Cylinder</h2><dl><dt>HTML</dt><dd><code>&lt;div id="cylinder1" class="cylinder"&gt;<br />&lt;div&gt;&lt;/div&gt; ( *@sides+2 )<br />&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#cylinder1{<br />.cylinder( @diameter, @height, @sides );<br />}</code></dd></dl></div>
+          <div></div>
+          <div><h2>Prism</h2><dl><dt>HTML</dt><dd><code>&lt;div id="prism1" class="prism"&gt;<br />&lt;div&gt;&lt;/div&gt; ( *5 )<br />&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#prism1{<br />.prism( @width, @height, @depth );<br />}</code></dd></dl></div>
+          <div></div>
+          <div><h2>Pyramid</h2><dl><dt>HTML</dt><dd><code>&lt;div id="pyramid1" class="pyramid"&gt;<br />&lt;div&gt;&lt;/div&gt; ( *5 )<br />&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#pyramid1{<br />.pyramid( @width, @height );<br />}</code></dd></dl></div>
+          <div></div>
+          <div><h2>Sphere</h2><dl><dt>HTML</dt><dd><code>&lt;div id="sphere1" class="sphere"&gt;<br />&lt;div&gt;&lt;/div&gt; ( *@sides<sup>2</sup>/2 )<br />&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#sphere1{<br />.sphere( @diameter, @sides );<br />}</code></dd></dl></div>
+          <div></div>
+          <!--<div><h2>Spike</h2><dl><dt>HTML</dt><dd><code>&lt;div id="spike1" class="spike"&gt;<br />&lt;div&gt;&lt;/div&gt; ( *8 )<br />&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#spike1{<br />.spike( @width, @height );<br />}</code></dd></dl></div>
+          <div></div>-->
+        </div>
+        
+        <div id="shapes">        
+          <div>
+            <div id="cuboid1" class="cuboid 6-div"></div>
+          </div>
+          <div>
+            <div id="cylinder1" class="cylinder 10-div"></div>
+          </div>
+          <div>
+            <div id="prism1" class="prism 5-div"></div>
+          </div>
+          <div>
+            <div id="pyramid1" class="pyramid 5-div"></div>
+          </div>                
+          <div>
+            <div id="sphere1" class="sphere 50-div"></div>
+          </div> 
+          <!--<div>
+            <div id="spike1" class="spike 8-div"></div>
+          </div>-->            
+        </div>
+      
+      </div>
+      
+      <div id="small-cog">
+       
+        <div id="small-cog_shape1" class="cylinder">
+          <div></div>
+          <div></div>
+          <div><h2>Viewport</h2><p>The main div containing your 3D scene.</p><dl><dt>HTML</dt><dd><code>&lt;div id="viewport1"&gt;&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#viewport1{<br />.viewport( @width, @height, @perspective );<br />}</code></dd></dl></div>
+          <div></div>
+          <div><h2>Camera</h2><p>An optional container to handle the point of view.</p><dl><dt>HTML</dt><dd><code>&lt;div id="viewport1"&gt;<br />&lt;div id="camera1"&gt;&lt;/div&gt;<br />&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#camera1{<br />.camera( );<br />}</code></dd></dl></div>
+          <div></div>
+          <div><h2>Assembly</h2><p>A group of static shapes (complex object).</p><dl><dt>HTML</dt><dd><code>&lt;div id="assembly1"&gt;&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#assembly1{<br />.assembly( @width, @height );<br />}</code></dd></dl></div>
+          <div></div>
+          <div><h2>Customize</h2><p>Use jQuery generated classes to customize your shapes.</p><dl><dt>CSS</dt><dd><code>.shape .face {<br />  background-image:url("images/texture.png");<br />color:rgba(0,0,0,.5);<br />}</code></dd></dl></div>
+          <div></div>
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>
+  
+</body>
+</html>
