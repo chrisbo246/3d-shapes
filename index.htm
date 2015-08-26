@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 
-  <title>3D shapes with LESS/CSS3/jQuery</title>
+  <title>3D shapes with LESS</title>
   <meta name="description" content="3D cube with CSS3" />
   <meta name="author" content="Christophe BOISIER">
   <meta charset=UTF-8 />
@@ -10,189 +10,162 @@
 
   <!--CSS-->
   <style>
-  @import url(http://fonts.googleapis.com/css?family=Raleway:900);
   body{
-  width:100%;
-  height:100%;
   margin:0;
   padding:0;
   font-size:100%;
-  font-family: 'Raleway', sans-serif;
   }
-  #viewport1{
-  /*background-image: -webkit-radial-gradient(50% 50%, 1000px 1000px, #000, #000 6%, #222);
-  background-image: radial-gradient(50% 50%, 1000px 1000px, #000, #000 6%, #f22);*/
-  background-image: -webkit-radial-gradient(50% 50%, 1000px 1000px, #bbb, #bbb 6%, #fff);
-  background-image: radial-gradient(50% 50%, 1000px 1000px, #bbb, #bbb 6%, #fff);
+  #view1{
+  background: #7d7e7d;
+  background: -moz-linear-gradient(top,  #7d7e7d 0%, #0e0e0e 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7d7e7d), color-stop(100%,#0e0e0e));
+  background: -webkit-linear-gradient(top,  #7d7e7d 0%,#0e0e0e 100%);
+  background: -o-linear-gradient(top,  #7d7e7d 0%,#0e0e0e 100%);
+  background: -ms-linear-gradient(top,  #7d7e7d 0%,#0e0e0e 100%);
+  background: linear-gradient(to bottom,  #7d7e7d 0%,#0e0e0e 100%);
   }
-  #viewport1:before{
-  content:"3D";
-  color:rgba(255,255,255,.03);
-  font-size:30em;
-  font-weight:900;
-  position:absolute;
-  left:0;
-  right:0;
-  top:0;
-  bottom:0;
-  margin:auto auto;
-  text-align:center;
+  .scene{
+  padding:.5em;
+  background: rgba(0, 255, 0, 0.1);
+  box-shadow:inset 0 0 0 1px rgba(0, 255, 0, 0.1);
   }
   .face{  
   box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(0, 0, 0, 0.05);
   }
-  #shapes .shape .face{
-  color:black;
-  background-color:white;
-  background-image:url("images/strawberry.jpg");
-  opacity:.8;
+  .face:hover{
+  background-color: rgba(255,255,255,.8)!important;
   }
-  #shapes .shape .face:after{
-  content:"Lorem ipsum dolor sit amet, officiis postulant eum in, vim percipit iracundia cu. Eirmod necessitatibus quo ne. Vis no assum facete definiebas, quo ignota primis rationibus ad. In idque soluta patrioque eam, at ullum mnesarchum adipiscing his, ei duo decore mentitum accusata. Cu nec voluptua salutandi aliquando, case velit posidonium eos te. Cu mei modus minim liber, his blandit menandri te, suas denique oportere vel an.";
-  }
-  #shapes .shape:hover .face:after{
-  display:none;
-  }
-  #shapes>div>div{
-  animation:spin 10s linear 0 infinite normal;
-  }
-  #shapes>div>div:hover{
-  animation-play-state:paused;
-  }
-  #big-cog_shape1 .face,
-  #small-cog_shape1 .face{
-  background-image:url("images/brushed_alu.png");
+  .face{
   text-align:center;
-  color:rgba(0,0,0,.5);  
+  vertical-align:middle;  
   }
-  #big-cog_shape1 .face dl{
-  text-align:left;
-  margin: 0 3em;
+  #shape2 .face{
+  /*transform:rotateX(180deg)!important;*/
   }
-  #big-cog_shape1 .face h2{
-  font-size:3em;
-  text-transform:uppercase;
-  text-shadow:0 3px 0 3px rgba(255,255,255,.8);
-  margin:0;
-  }
-  @keyframes camera-anim {
-  from{transform: translateX(0em) translateY(15em) translateZ(-40em) rotateX(10deg) rotateY(0deg)}
-  80%{transform: translateX(-40em) translateY(5em) translateZ(-20em) rotateX(-5deg) rotateY(10deg)}
-  to{transform: translateX(0em) translateY(15em) translateZ(-40em) rotateX(10deg) rotateY(0deg)}
-  }
-  @keyframes spin {
-  from{transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg)}
-  to{transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg)}
+  .face strong{
+  font-size:2em;
   }
   </style>
-  <link href="css/helpers.css" rel="stylesheet" />
-  
+
   <!--LESS-->
   <style type="text/less">
   @import "less/panic-3d.less";
+  @import "less/panic-3d_cuboid.less";
+  @import "less/panic-3d_cylinder.less";
+  @import "less/panic-3d_prism.less";
+  @import "less/panic-3d_pyramid.less";
+  @import "less/panic-3d_diamond.less";
 
-  @big-cog_sides:10;
-  @big-cog_diameter:70em;  
-  @big-cog_anim_duration:60s;
-  @small-cog_diameter:50em;
-  
-  #viewport1{
-    .viewport(100%, 100%, 800px);
-    &:hover #big-cog {animation-play-state:paused;}
-    &:hover #small-cog {animation-play-state:paused;}
-    &:hover #camera1 {animation-play-state:paused;}
-    
-    #camera1{
-    .camera();
-    animation:camera-anim 60s linear 0 infinite normal;
-    }
-    
-    #big-cog{
-      .assembly(20em, 20em);
-      animation:big-cog @big-cog_anim_duration linear 0 infinite normal;      
+  #view1{
+    .3d-view(100%, 100%, 800px);
+    transform:scale(1,1);
+
+    #main_scene{
+      .scene(20em, 20em); // width, height
+      top:50%;
+      left:50%;
+      transform:translateZ(-50em);
+
       
-      #big-cog_shape1{
-      .cylinder(@big-cog_diameter, 16em, @big-cog_sides);   
+      #shape1{
+      .cuboid(10em, 6em, 10em, rgba(200,200,200,.5) ); // width, height, depth, color
+      transform:translate3D(0em, -3em, 0em) rotateX(0deg) rotateY(0deg) rotateZ(0deg);      
+      display:none;
       }
-      
-      #shapes{
-        .assembly(40em, 40em);
-        transform:translateY(-14em);
-        
-        @translate:(@big-cog_diameter / 2 - 5em);
-        @angle:(360deg / @big-cog_sides) * 2;
-        @delta:-90deg + @angle / 2; //-90deg + @angle / 2;
-        
-        >div:nth-child(1){
-        .assembly(10em, 10em);
-        transform: rotateY(@delta + @angle * 1) translateZ(@translate);
-        }
-        >div:nth-child(2){
-        .assembly(10em, 10em);
-        transform: rotateY(@delta + @angle * 2) translateZ(@translate);
-        }
-        >div:nth-child(3){
-        .assembly(10em, 10em);
-        transform: rotateY(@delta + @angle * 3) translateZ(@translate);
-        }
-        >div:nth-child(4){
-        .assembly(10em, 10em);
-        transform: rotateY(@delta + @angle * 4) translateZ(@translate);
-        }
-        >div:nth-child(5){
-        .assembly(10em, 10em);
-        transform: rotateY(@delta + @angle * 5) translateZ(@translate);
-        }
-        /*>div:nth-child(6){
-        .assembly(10em, 10em);
-        transform: rotateY(@delta + @angle * 6) translateZ(@translate);
-        }*/
-        #cuboid1{
-        .cuboid(10em, 8em, 6em);        
-        }
 
-        #cylinder1{
-        .cylinder(10em, 8em, 8);
-        }
-
-        #prism1{
-        .prism(10em, 8em, 6em);
-        }
-
-        #pyramid1{
-        .pyramid(10em, 8em);
-        }
-
-        #sphere1{
-        .sphere(10em, 10);
-        }
-        
-        /*#spike1{
-        .spike(4em, 10em);
-        }*/
-
+      #shape2{      
+      .cylinder(100em, 15em, 14, "../images/file0001373490682.jpg"); // diameter, height, sides, color
+      animation:rotate-y 120s linear 0 infinite normal;
+      transition: transform ease 2s;
+      &:hover{
+      animation-play-state:paused;
+      //transform:translateZ(10em);
+      //transition: transform ease 2s;
       }
-      
+      }
+
+      #shape3{
+      .prism(8em, 7em, 6em, rgba(255,0,255,.5)); // width, height, depth, color
+      transform:translate3D(7em, 2em, 2em) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+      display:none;
+      }
+
+      #shape4{
+      .pyramid(12em, 4em, rgba(128,50,50,.5)); // side width, height, color
+      transform:translate3D(0em, -8em, 0em) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+      display:none;
+      }
     }
-    
-    #small-cog{
-      .assembly(20em, 20em);
-      animation:small-cog (@big-cog_anim_duration * (@small-cog_diameter / @big-cog_diameter)) linear 0 infinite normal;
-      
-      #small-cog_shape1{
-      .cylinder(@small-cog_diameter, 16em, 8);    
+
+    #cuboid_preview{
+      .scene(8em, 8em);
+      top:5em;
+      left:5em;
+      animation:preview-anim 10s linear 0 infinite normal;
+      &:hover{animation-play-state:paused;}
+      #small_cuboid{
+      .cuboid(4em, 4em, 4em, "../images/grunge_wall.png");
+      //animation:preview-anim 13s linear 3s infinite normal;
+      }
+    }
+    #cylinder_preview{
+      .scene(8em, 8em);
+      top:5em;
+      left:15em;
+      animation:preview-anim 11s linear 1s infinite normal;
+      &:hover{animation-play-state:paused;}
+      #small_cylinder{
+      .cylinder(5em, 5em, 8, "../images/grunge_wall.png");
+      //animation:preview-anim 13s linear 3s infinite normal;
+      }
+    }
+    #prism_preview{
+      .scene(8em, 8em);
+      top:5em;
+      left:25em;
+      animation:preview-anim 12s linear 2s infinite normal;
+      &:hover{animation-play-state:paused;}
+      #small_prism{
+      .prism(5em, 4em, 3em, "../images/grunge_wall.png");
+      //animation:preview-anim 13s linear 3s infinite normal;
+      }
+    }
+    #pyramid_preview{
+      .scene(8em, 8em);
+      top:5em;
+      left:35em;
+      animation:preview-anim 13s linear 3s infinite normal;
+      &:hover{animation-play-state:paused;}
+      #small_pyramid{
+      .pyramid(5em, 4em, "../images/grunge_wall.png", 3em);
+      //animation:preview-anim 13s linear 3s infinite normal;
+      }
+    }
+    #diamond_preview{
+      .scene(8em, 8em);
+      top:5em;
+      left:45em;
+      animation:preview-anim 13s linear 3s infinite normal;
+      &:hover{animation-play-state:paused;}
+      #small_diamond{
+      .diamond(3em, 6em, "../images/grunge_wall.png");
+      //animation:preview-anim 13s linear 3s infinite normal;
       }
     }
 
   }
-    
-  @keyframes big-cog {
-  from{transform: translateX(0) rotateY(0deg)}
-  to{transform: translateX(0) rotateY(-360deg)}
+
+  @keyframes scene-anim {
+  from{transform:rotateY(-45deg)}
+  to{transform:rotateY(315deg)}
   }
-  @keyframes small-cog {
-  from{transform: translateX((@big-cog_diameter + @small-cog_diameter) / 2) rotateY(0deg)}
-  to{transform: translateX((@big-cog_diameter + @small-cog_diameter) / 2) rotateY(360deg)}
+  @keyframes rotate-y {
+  from{transform:rotateY(0deg)}
+  to{transform:rotateY(360deg)}
+  }
+  @keyframes preview-anim {
+  from{transform:rotateX(-45deg) rotateY(-45deg) rotateZ(-45deg)}
+  to{transform:rotateX(-45deg) rotateY(315deg) rotateZ(315deg)}
   }
   </style>
   <!--<link rel="stylesheet/less" type="text/css" href="less/style.less" />-->
@@ -200,85 +173,137 @@
   <!--JS-->
   <script type="text/javascript">
   less = {
-  env: "development", // development or "production"
+  env: "production", // development or "production"
   dumpLineNumbers: "comments", // comments or "mediaQuery" or "all"
   relativeUrls: true
   };
   </script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <script type="text/javascript" src="//cdn.jsdelivr.net/less/1.4.2/less.min.js"></script>
-  <script type="text/javascript" src="//cdn.jsdelivr.net/prefixfree/1.0.7/prefixfree.min.js"></script>
+  <script src="//cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/less/2.2.0/less.min.js"></script>
+  <script src="//cdn.jsdelivr.net/prefixfree/1.0.7/prefixfree.dynamic-dom.min.js"></script>
   <script src="js/panic-3d.js"></script>
 
 </head>
 <body>
-  
-  <!-- class viewport camera and assembly are only here for debug -->
 
-  <div id="viewport1">
-    <div id="camera1">
+  <div id="view1">
+  perspective view
 
-      <div id="big-cog">
+    <!-- Main scene -->
 
-        <div id="big-cog_shape1" class="cylinder">
-          <div></div>
-          <div></div>
-          <div><h2>Cuboid</h2><dl><dt>HTML</dt><dd><code>&lt;div id="cuboid1" class="cuboid"&gt;<br />&lt;div&gt;&lt;/div&gt; ( *6 )<br />&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#cuboid1{<br />.cuboid( @width, @height, @depth );<br />}</code></dd></dl></div>
-          <div></div>
-          <div><h2>Cylinder</h2><dl><dt>HTML</dt><dd><code>&lt;div id="cylinder1" class="cylinder"&gt;<br />&lt;div&gt;&lt;/div&gt; ( *@sides+2 )<br />&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#cylinder1{<br />.cylinder( @diameter, @height, @sides );<br />}</code></dd></dl></div>
-          <div></div>
-          <div><h2>Prism</h2><dl><dt>HTML</dt><dd><code>&lt;div id="prism1" class="prism"&gt;<br />&lt;div&gt;&lt;/div&gt; ( *5 )<br />&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#prism1{<br />.prism( @width, @height, @depth );<br />}</code></dd></dl></div>
-          <div></div>
-          <div><h2>Pyramid</h2><dl><dt>HTML</dt><dd><code>&lt;div id="pyramid1" class="pyramid"&gt;<br />&lt;div&gt;&lt;/div&gt; ( *5 )<br />&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#pyramid1{<br />.pyramid( @width, @height );<br />}</code></dd></dl></div>
-          <div></div>
-          <div><h2>Sphere</h2><dl><dt>HTML</dt><dd><code>&lt;div id="sphere1" class="sphere"&gt;<br />&lt;div&gt;&lt;/div&gt; ( *@sides<sup>2</sup>/2 )<br />&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#sphere1{<br />.sphere( @diameter, @sides );<br />}</code></dd></dl></div>
-          <div></div>
-          <!--<div><h2>Spike</h2><dl><dt>HTML</dt><dd><code>&lt;div id="spike1" class="spike"&gt;<br />&lt;div&gt;&lt;/div&gt; ( *8 )<br />&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#spike1{<br />.spike( @width, @height );<br />}</code></dd></dl></div>
-          <div></div>-->
-        </div>
-        
-        <div id="shapes">        
-          <div>
-            <div id="cuboid1" class="cuboid 6-div"></div>
-          </div>
-          <div>
-            <div id="cylinder1" class="cylinder 10-div"></div>
-          </div>
-          <div>
-            <div id="prism1" class="prism 5-div"></div>
-          </div>
-          <div>
-            <div id="pyramid1" class="pyramid 5-div"></div>
-          </div>                
-          <div>
-            <div id="sphere1" class="sphere 50-div"></div>
-          </div> 
-          <!--<div>
-            <div id="spike1" class="spike 8-div"></div>
-          </div>-->            
-        </div>
-      
+    <div id="main_scene" class="scene">
+      scene
+
+      <!-- id="shape1" user defined in style.less -->
+      <!-- class="cuboid" used by jquery to build extra html -->
+      <div id="shape1" class="cuboid">
+        <div><p>Lorem ipsum dolor sit amet, cu qui mollis feugiat, at mel vocibus erroribus. Sea perfecto patrioque cu. Ius an solum malorum concludaturque, modus errem pri no. Pro nemore utroque abhorreant an, tamquam imperdiet pro ei. Vix at aeterno blandit suavitate, mei verear bonorum contentiones cu.</p></div>
+        <div><p>Ea quo mandamus sapientem consectetuer, eius vidisse no ius, his te postea fuisset. Mel ludus regione evertitur ea, sensibus moderatius pro ea. Et quo alienum aliquando, doctus tractatos adolescens ad est, nec at tation recteque. His te aliquid deleniti efficiendi, populo maiestatis mel eu, ei eum dolore molestiae conclusionemque. Cum ad illum malorum, cu has viris invidunt.</p></div>
+        <div><p>Semper offendit contentiones ea vis. Nec id delenit reprehendunt. Sed no ridens nostrum intellegat, dolore cetero accusam usu id, at iudicabit explicari mea. Augue mazim pri ut. Mel tacimates consetetur definitionem ne, has ei tacimates consequat.</p></div>
+        <div><p>Illud dolorum gubergren et nam, ludus alterum feugait ex vix. At tempor aperiri eum. Quo te illud intellegat, mea stet prima option cu. Maluisset constituto usu id, stet agam pertinax has ex.</div>
+        <div><p><strong>5</strong><br/>bottom</p></div>
+        <div><p><strong>6</strong><br/>top</p></div>
       </div>
-      
-      <div id="small-cog">
-       
-        <div id="small-cog_shape1" class="cylinder">
-          <div></div>
-          <div></div>
-          <div><h2>Viewport</h2><p>The main div containing your 3D scene.</p><dl><dt>HTML</dt><dd><code>&lt;div id="viewport1"&gt;&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#viewport1{<br />.viewport( @width, @height, @perspective );<br />}</code></dd></dl></div>
-          <div></div>
-          <div><h2>Camera</h2><p>An optional container to handle the point of view.</p><dl><dt>HTML</dt><dd><code>&lt;div id="viewport1"&gt;<br />&lt;div id="camera1"&gt;&lt;/div&gt;<br />&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#camera1{<br />.camera( );<br />}</code></dd></dl></div>
-          <div></div>
-          <div><h2>Assembly</h2><p>A group of static shapes (complex object).</p><dl><dt>HTML</dt><dd><code>&lt;div id="assembly1"&gt;&lt;/div&gt;</code></dd><dt>LESS</dt><dd><code>#assembly1{<br />.assembly( @width, @height );<br />}</code></dd></dl></div>
-          <div></div>
-          <div><h2>Customize</h2><p>Use jQuery generated classes to customize your shapes.</p><dl><dt>CSS</dt><dd><code>.shape .face {<br />  background-image:url("images/texture.png");<br />color:rgba(0,0,0,.5);<br />}</code></dd></dl></div>
-          <div></div>
-        </div>
-        
+
+      <div id="shape2" class="cylinder">
+        <div></div>
+        <div></div>
+        <div><h2>Face 3</h2><p>Vim ne esse assueverit, per vide iudico legimus ex. Choro omnium mea cu, vix eros petentium ea, has putent lobortis ei. Pri postea discere et, ne soluta dissentiet vituperatoribus sea. Fabellas vulputate reprehendunt vix ne. At harum senserit conceptam nec, cetero sanctus ex pri, rebum dicta phaedrum ea mea.</p></div>
+        <div><h2>Face 4</h2><p>Vim ne esse assueverit, per vide iudico legimus ex. Choro omnium mea cu, vix eros petentium ea, has putent lobortis ei. Pri postea discere et, ne soluta dissentiet vituperatoribus sea. Fabellas vulputate reprehendunt vix ne. At harum senserit conceptam nec, cetero sanctus ex pri, rebum dicta phaedrum ea mea.</p></div>
+        <div><h2>Face 5</h2><p>Vim ne esse assueverit, per vide iudico legimus ex. Choro omnium mea cu, vix eros petentium ea, has putent lobortis ei. Pri postea discere et, ne soluta dissentiet vituperatoribus sea. Fabellas vulputate reprehendunt vix ne. At harum senserit conceptam nec, cetero sanctus ex pri, rebum dicta phaedrum ea mea.</p></div>
+        <div><h2>Face 6</h2><p>Vim ne esse assueverit, per vide iudico legimus ex. Choro omnium mea cu, vix eros petentium ea, has putent lobortis ei. Pri postea discere et, ne soluta dissentiet vituperatoribus sea. Fabellas vulputate reprehendunt vix ne. At harum senserit conceptam nec, cetero sanctus ex pri, rebum dicta phaedrum ea mea.</p></div>
+        <div><h2>Face 7</h2><p>Vim ne esse assueverit, per vide iudico legimus ex. Choro omnium mea cu, vix eros petentium ea, has putent lobortis ei. Pri postea discere et, ne soluta dissentiet vituperatoribus sea. Fabellas vulputate reprehendunt vix ne. At harum senserit conceptam nec, cetero sanctus ex pri, rebum dicta phaedrum ea mea.</p></div>
+        <div><h2>Face 8</h2><p>Vim ne esse assueverit, per vide iudico legimus ex. Choro omnium mea cu, vix eros petentium ea, has putent lobortis ei. Pri postea discere et, ne soluta dissentiet vituperatoribus sea. Fabellas vulputate reprehendunt vix ne. At harum senserit conceptam nec, cetero sanctus ex pri, rebum dicta phaedrum ea mea.</p></div>
+        <div><h2>Face 9</h2><p>Vim ne esse assueverit, per vide iudico legimus ex. Choro omnium mea cu, vix eros petentium ea, has putent lobortis ei. Pri postea discere et, ne soluta dissentiet vituperatoribus sea. Fabellas vulputate reprehendunt vix ne. At harum senserit conceptam nec, cetero sanctus ex pri, rebum dicta phaedrum ea mea.</p></div>
+        <div><h2>Face 10</h2><p>Vim ne esse assueverit, per vide iudico legimus ex. Choro omnium mea cu, vix eros petentium ea, has putent lobortis ei. Pri postea discere et, ne soluta dissentiet vituperatoribus sea. Fabellas vulputate reprehendunt vix ne. At harum senserit conceptam nec, cetero sanctus ex pri, rebum dicta phaedrum ea mea.</p></div>
+        <div><h2>Face 11</h2><p>Vim ne esse assueverit, per vide iudico legimus ex. Choro omnium mea cu, vix eros petentium ea, has putent lobortis ei. Pri postea discere et, ne soluta dissentiet vituperatoribus sea. Fabellas vulputate reprehendunt vix ne. At harum senserit conceptam nec, cetero sanctus ex pri, rebum dicta phaedrum ea mea.</p></div>
+        <div><h2>Face 12</h2><p>Vim ne esse assueverit, per vide iudico legimus ex. Choro omnium mea cu, vix eros petentium ea, has putent lobortis ei. Pri postea discere et, ne soluta dissentiet vituperatoribus sea. Fabellas vulputate reprehendunt vix ne. At harum senserit conceptam nec, cetero sanctus ex pri, rebum dicta phaedrum ea mea.</p></div>
+        <div><h2>Face 13</h2><p>Vim ne esse assueverit, per vide iudico legimus ex. Choro omnium mea cu, vix eros petentium ea, has putent lobortis ei. Pri postea discere et, ne soluta dissentiet vituperatoribus sea. Fabellas vulputate reprehendunt vix ne. At harum senserit conceptam nec, cetero sanctus ex pri, rebum dicta phaedrum ea mea.</p></div>
+        <div><h2>Face 14</h2><p>Vim ne esse assueverit, per vide iudico legimus ex. Choro omnium mea cu, vix eros petentium ea, has putent lobortis ei. Pri postea discere et, ne soluta dissentiet vituperatoribus sea. Fabellas vulputate reprehendunt vix ne. At harum senserit conceptam nec, cetero sanctus ex pri, rebum dicta phaedrum ea mea.</p></div>
+        <div><h2>Face 15</h2><p>Vim ne esse assueverit, per vide iudico legimus ex. Choro omnium mea cu, vix eros petentium ea, has putent lobortis ei. Pri postea discere et, ne soluta dissentiet vituperatoribus sea. Fabellas vulputate reprehendunt vix ne. At harum senserit conceptam nec, cetero sanctus ex pri, rebum dicta phaedrum ea mea.</p></div>
+        <div><h2>Face 16</h2><p>Vim ne esse assueverit, per vide iudico legimus ex. Choro omnium mea cu, vix eros petentium ea, has putent lobortis ei. Pri postea discere et, ne soluta dissentiet vituperatoribus sea. Fabellas vulputate reprehendunt vix ne. At harum senserit conceptam nec, cetero sanctus ex pri, rebum dicta phaedrum ea mea.</p></div>
       </div>
-      
+
+      <div id="shape3" class="prism">
+        <div><p><strong>1</strong><br/>front</p></div>
+        <div><p><strong>2</strong><br/>back</p></div>
+          <div><p><strong>3</strong><br/>right</p></div>
+          <div><p><strong>4</strong><br/>left</p></div>
+        <div><p><strong>5</strong><br/>bottom</p></div>
+      </div>
+
+      <div id="shape4" class="pyramid">
+          <div><p><strong>1</strong><br/>front</p></div>
+          <div><p><strong>2</strong><br/>back</p></div>
+          <div><p><strong>3</strong><br/>left</p></div>
+          <div><p><strong>4</strong><br/>right</p></div>
+        <div><p><strong>5</strong><br/>bottom</p></div>
+      </div>
+
     </div>
+
+    <!-- Preview scenes -->
+
+    <div id="cuboid_preview" class="scene">
+      <div id="small_cuboid" class="cuboid">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+
+    <div id="cylinder_preview" class="scene">
+      <div id="small_cylinder" class="cylinder">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+
+    <div id="prism_preview" class="scene">
+      <div id="small_prism" class="prism">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+
+    <div id="pyramid_preview" class="scene">
+      <div id="small_pyramid" class="pyramid">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+    
+    <div id="diamond_preview" class="scene">
+      <div id="small_diamond" class="diamond">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+      </div>
+    </div>
+
   </div>
-  
+
 </body>
 </html>
