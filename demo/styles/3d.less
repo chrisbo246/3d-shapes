@@ -5,6 +5,7 @@
 @import "../../dist/panic-3d_prism.less";
 @import "../../dist/panic-3d_pyramid.less";
 @import "../../dist/panic-3d_diamond.less";
+@import "../../dist/panic-3d_sphere.less";
 
 #view1{
 .3d-view(100%, 100%, 800px);
@@ -100,6 +101,20 @@ transform:scale(1,1);
   #small_diamond{
   .diamond(3em, 6em, "../images/grunge_wall.png");
   //animation:preview-anim 13s linear 3s infinite normal;
+  }
+}
+#sphere_preview{
+  .sphere(30em, 8);
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:0;
+  right:0;
+  margin:auto;
+  animation:spin 10s linear 0 infinite normal;
+  &:hover{animation-play-state:paused;}
+  .face{
+    background:rgba(255,0,0,.5);
   }
 }
 

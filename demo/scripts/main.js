@@ -29,4 +29,20 @@ $(document).ready(function(){
     });
     */
 
+  // Sphere
+    var $shapes = $('.sphere'); //,.spike,'.pyramid3'
+    $shapes.each(function () {
+        var neededChildDivs = $(this).attr('class').match(/[ ^]+(\d+)-div/);
+        if (neededChildDivs != null){
+            var existingChildDivs = $(this).length;
+            var add = neededChildDivs[1] - existingChildDivs;
+            if (add > 0){
+                for (i = 0; i <= add; i++ ) {
+                    $(this).append('<div></div>');
+                }      
+            }
+        }
+    });
+    $shapes.children('div').wrap('<div class="face-wrapper"></div>');
+  
 });
