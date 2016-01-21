@@ -1,188 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html class="no-js" lang="en">
 <head>
-
   <title>3D shapes with LESS</title>
-  <meta name="description" content="3D cube with CSS3" />
+  <meta name="description" content="3D shapes with CSS3 demo" />
   <meta name="author" content="Christophe BOISIER">
-  <meta charset=UTF-8 />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <!--CSS-->
-  <style>
-  body{
-  margin:0;
-  padding:0;
-  font-size:100%;
-  }
-  #view1{
-  background: #7d7e7d;
-  background: -moz-linear-gradient(top,  #7d7e7d 0%, #0e0e0e 100%);
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#7d7e7d), color-stop(100%,#0e0e0e));
-  background: -webkit-linear-gradient(top,  #7d7e7d 0%,#0e0e0e 100%);
-  background: -o-linear-gradient(top,  #7d7e7d 0%,#0e0e0e 100%);
-  background: -ms-linear-gradient(top,  #7d7e7d 0%,#0e0e0e 100%);
-  background: linear-gradient(to bottom,  #7d7e7d 0%,#0e0e0e 100%);
-  }
-  .scene{
-  padding:.5em;
-  background: rgba(0, 255, 0, 0.1);
-  box-shadow:inset 0 0 0 1px rgba(0, 255, 0, 0.1);
-  }
-  .face{  
-  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(0, 0, 0, 0.05);
-  }
-  .face:hover{
-  background-color: rgba(255,255,255,.8)!important;
-  }
-  .face{
-  text-align:center;
-  vertical-align:middle;  
-  }
-  #shape2 .face{
-  /*transform:rotateX(180deg)!important;*/
-  }
-  .face strong{
-  font-size:2em;
-  }
-  </style>
-
-  <!--LESS-->
-  <style type="text/less">
-  @import "less/panic-3d.less";
-  @import "less/panic-3d_cuboid.less";
-  @import "less/panic-3d_cylinder.less";
-  @import "less/panic-3d_prism.less";
-  @import "less/panic-3d_pyramid.less";
-  @import "less/panic-3d_diamond.less";
-
-  #view1{
-    .3d-view(100%, 100%, 800px);
-    transform:scale(1,1);
-
-    #main_scene{
-      .scene(20em, 20em); // width, height
-      top:50%;
-      left:50%;
-      transform:translateZ(-50em);
-
-      
-      #shape1{
-      .cuboid(10em, 6em, 10em, rgba(200,200,200,.5) ); // width, height, depth, color
-      transform:translate3D(0em, -3em, 0em) rotateX(0deg) rotateY(0deg) rotateZ(0deg);      
-      display:none;
-      }
-
-      #shape2{      
-      .cylinder(100em, 15em, 14, "../images/file0001373490682.jpg"); // diameter, height, sides, color
-      animation:rotate-y 120s linear 0 infinite normal;
-      transition: transform ease 2s;
-      &:hover{
-      animation-play-state:paused;
-      //transform:translateZ(10em);
-      //transition: transform ease 2s;
-      }
-      }
-
-      #shape3{
-      .prism(8em, 7em, 6em, rgba(255,0,255,.5)); // width, height, depth, color
-      transform:translate3D(7em, 2em, 2em) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
-      display:none;
-      }
-
-      #shape4{
-      .pyramid(12em, 4em, rgba(128,50,50,.5)); // side width, height, color
-      transform:translate3D(0em, -8em, 0em) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
-      display:none;
-      }
-    }
-
-    #cuboid_preview{
-      .scene(8em, 8em);
-      top:5em;
-      left:5em;
-      animation:preview-anim 10s linear 0 infinite normal;
-      &:hover{animation-play-state:paused;}
-      #small_cuboid{
-      .cuboid(4em, 4em, 4em, "../images/grunge_wall.png");
-      //animation:preview-anim 13s linear 3s infinite normal;
-      }
-    }
-    #cylinder_preview{
-      .scene(8em, 8em);
-      top:5em;
-      left:15em;
-      animation:preview-anim 11s linear 1s infinite normal;
-      &:hover{animation-play-state:paused;}
-      #small_cylinder{
-      .cylinder(5em, 5em, 8, "../images/grunge_wall.png");
-      //animation:preview-anim 13s linear 3s infinite normal;
-      }
-    }
-    #prism_preview{
-      .scene(8em, 8em);
-      top:5em;
-      left:25em;
-      animation:preview-anim 12s linear 2s infinite normal;
-      &:hover{animation-play-state:paused;}
-      #small_prism{
-      .prism(5em, 4em, 3em, "../images/grunge_wall.png");
-      //animation:preview-anim 13s linear 3s infinite normal;
-      }
-    }
-    #pyramid_preview{
-      .scene(8em, 8em);
-      top:5em;
-      left:35em;
-      animation:preview-anim 13s linear 3s infinite normal;
-      &:hover{animation-play-state:paused;}
-      #small_pyramid{
-      .pyramid(5em, 4em, "../images/grunge_wall.png", 3em);
-      //animation:preview-anim 13s linear 3s infinite normal;
-      }
-    }
-    #diamond_preview{
-      .scene(8em, 8em);
-      top:5em;
-      left:45em;
-      animation:preview-anim 13s linear 3s infinite normal;
-      &:hover{animation-play-state:paused;}
-      #small_diamond{
-      .diamond(3em, 6em, "../images/grunge_wall.png");
-      //animation:preview-anim 13s linear 3s infinite normal;
-      }
-    }
-
-  }
-
-  @keyframes scene-anim {
-  from{transform:rotateY(-45deg)}
-  to{transform:rotateY(315deg)}
-  }
-  @keyframes rotate-y {
-  from{transform:rotateY(0deg)}
-  to{transform:rotateY(360deg)}
-  }
-  @keyframes preview-anim {
-  from{transform:rotateX(-45deg) rotateY(-45deg) rotateZ(-45deg)}
-  to{transform:rotateX(-45deg) rotateY(315deg) rotateZ(315deg)}
-  }
-  </style>
-  <!--<link rel="stylesheet/less" type="text/css" href="less/style.less" />-->
-
-  <!--JS-->
-  <script type="text/javascript">
-  less = {
-  env: "production", // development or "production"
-  dumpLineNumbers: "comments", // comments or "mediaQuery" or "all"
-  relativeUrls: true
-  };
-  </script>
-  <script src="//cdn.jsdelivr.net/jquery/2.1.4/jquery.min.js"></script>
-  <script src="//cdn.jsdelivr.net/less/2.2.0/less.min.js"></script>
-  <script src="//cdn.jsdelivr.net/prefixfree/1.0.7/prefixfree.dynamic-dom.min.js"></script>
-  <script src="js/panic-3d.js"></script>
-
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link type="text/css" href="demo/styles/main.css" />
+  <script src="https://cdn.jsdelivr.net/jquery/2.2.0/jquery.min.js"></script>
+  <script type="text/javascript" src="demo/scripts/main.js"></script>
 </head>
 <body>
 
@@ -289,7 +117,7 @@
         <div></div>
       </div>
     </div>
-    
+
     <div id="diamond_preview" class="scene">
       <div id="small_diamond" class="diamond">
         <div></div>
@@ -304,6 +132,17 @@
     </div>
 
   </div>
-
+  
+  <link rel="stylesheet/less" type="text/css" href="demo/styles/3d.less" />
+  <script type="text/javascript">
+  less = {
+  env: "development", // development or "production"
+  dumpLineNumbers: "all", // comments or "mediaQuery" or "all"
+  //relativeUrls: true
+  };
+  </script>
+  <script src="https://cdn.jsdelivr.net/less/2.5.3/less.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/prefixfree/1.0.7/prefixfree.dynamic-dom.min.js"></script>
+  
 </body>
 </html>
