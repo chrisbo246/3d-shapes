@@ -1,3 +1,33 @@
+body{
+margin:0;
+padding:0;
+font-size:100%;
+}
+#view1{
+background: #7d7e7d;
+background: linear-gradient(to bottom,  #7d7e7d 0%,#0e0e0e 100%);
+}
+.scene{
+padding:.5em;
+background: rgba(0, 255, 0, 0.1);
+box-shadow:inset 0 0 0 1px rgba(0, 255, 0, 0.1);
+}
+.face{  
+box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.2), inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+.face:hover{
+background-color: rgba(255,255,255,.8)!important;
+}
+.face{
+text-align:center;
+vertical-align:middle;  
+}
+#shape2 .face{
+/*transform:rotateX(180deg)!important;*/
+}
+.face strong{
+font-size:2em;
+}
 
 .shape > .face-wrapper,
 .shape > .face {
